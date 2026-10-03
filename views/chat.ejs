@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatSphere - Real-time Messaging</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      
+      <!-- Brand Header -->
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <span class="brand-name">ChatSphere</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn theme-toggle" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <a href="/profile" class="icon-btn" title="Profile Settings">
+            <i class="fa-solid fa-gear"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Current User Profile Card -->
+      <div class="current-user-card">
+        <div class="avatar-wrapper">
+          <img src="<%= currentUser.profilePicture %>" alt="<%= currentUser.name %>" class="user-avatar" id="myAvatar" onerror="this.src='/images/default-avatar.svg'">
+          <span class="status-indicator online"></span>
+        </div>
+        <div class="user-info">
+          <h4 class="user-name"><%= currentUser.name %></h4>
+          <span class="user-handle">@<%= currentUser.username %></span>
+        </div>
+        <button class="logout-btn" id="logoutBtn" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+
+      <!-- Search & Start New Chat -->
+      <div class="sidebar-search-section">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="userSearchInput" placeholder="Search people or messages...">
+          <button class="clear-search-btn hidden" id="clearSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <button class="btn btn-primary new-chat-btn" id="newChatModalBtn" title="Start New Conversation">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <!-- Recent Conversations Header -->
+      <div class="conversations-header">
+        <span>Recent Chats</span>
+        <span class="badge badge-primary" id="totalUnreadBadge" style="display: none;">0</span>
+      </div>
+
+      <!-- Conversations List -->
+      <div class="conversations-list" id="conversationsList">
+        <div class="loading-spinner-container">
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- CENTER CHAT AREA -->
+    <main class="chat-area" id="chatArea">
+      
+      <!-- Placeholder when no conversation is active -->
+      <div class="empty-chat-placeholder" id="emptyChatPlaceholder">
+        <div class="empty-content">
+          <div class="empty-illustration">
+            <i class="fa-regular fa-paper-plane"></i>
+          </div>
+          <h3>Welcome to ChatSphere, <%= currentUser.name %>!</h3>
+          <p>Select a conversation from the sidebar or click <strong class="text-accent">+</strong> to start chatting in real-time.</p>
+          <button class="btn btn-primary" id="startChatBtn">
+            <i class="fa-solid fa-user-plus"></i> Find People to Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Chat Interface -->
+      <div class="active-chat-container hidden" id="activeChatContainer">
+        
+        <!-- Chat Header -->
+        <header class="chat-header">
+          <button class="icon-btn back-to-sidebar-btn" id="backToSidebarBtn" title="Back to Chats">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+
+          <div class="chat-user-profile" id="chatHeaderProfile">
+            <div class="avatar-wrapper">
+              <img src="/images/default-avatar.svg" alt="User Avatar" id="headerAvatar" class="user-avatar" onerror="this.src='/images/default-avatar.svg'">
+              <span class="status-indicator" id="headerStatusDot"></span>
+            </div>
+            <div class="chat-header-details">
+              <h3 id="headerName">User Name</h3>
+              <p class="status-text" id="headerStatusText">Offline</p>
+            </div>
+          </div>
+
+          <div class="chat-header-actions">
+            <button class="icon-btn" id="toggleRightPanelBtn" title="View Profile Details">
+              <i class="fa-solid fa-circle-info"></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Messages Area -->
+        <div class="messages-container" id="messagesContainer">
+          <div class="loading-spinner-container">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator Banner -->
+        <div class="typing-indicator-bar hidden" id="typingIndicatorBar">
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span id="typingText">Someone is typing...</span>
+        </div>
+
+        <!-- Attachment Preview Bar -->
+        <div class="attachment-preview-bar hidden" id="attachmentPreviewBar">
+          <div class="preview-file-info">
+            <i class="fa-solid fa-paperclip" id="previewFileIcon"></i>
+            <span id="previewFileName">filename.png</span>
+          </div>
+          <button class="cancel-attachment-btn" id="cancelAttachmentBtn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Chat Input Footer -->
+        <footer class="chat-input-footer">
+          <div class="chat-input-wrapper">
+            
+            <!-- Emoji Picker Popover -->
+            <button class="input-icon-btn" id="emojiPickerBtn" title="Insert Emoji">
+              <i class="fa-regular fa-face-smile"></i>
+            </button>
+            <div class="emoji-picker-dropdown hidden" id="emojiPickerDropdown">
+              <div class="emoji-list">
+                😀 😂 😄 🤣 😊 😇 🙂 😉 😍 🥰 😘 😜 🤪 🤓 😎 🥳 🤩 🤔 🤫 🏼 👍 👎 ❤️ 🔥 🎉 💯 🚀 ✨ 👏 🙌 💡
+              </div>
+            </div>
+
+            <!-- Attachment File Input -->
+            <input type="file" id="attachmentInput" class="hidden">
+            <button class="input-icon-btn" id="attachmentBtn" title="Attach Image or File">
+              <i class="fa-solid fa-paperclip"></i>
+            </button>
+
+            <!-- Message Textarea -->
+            <textarea id="messageInput" placeholder="Type a message..." rows="1"></textarea>
+
+            <!-- Send Button -->
+            <button class="send-message-btn" id="sendMessageBtn" title="Send Message">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </footer>
+
+      </div>
+    </main>
+
+    <!-- RIGHT DETAILS PANEL -->
+    <aside class="right-panel hidden" id="rightPanel">
+      <div class="right-panel-header">
+        <h4>User Profile</h4>
+        <button class="icon-btn" id="closeRightPanelBtn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="right-panel-content">
+        <div class="panel-user-card">
+          <div class="large-avatar-wrapper">
+            <img src="/images/default-avatar.svg" id="panelAvatar" alt="User Avatar" onerror="this.src='/images/default-avatar.svg'">
+            <span class="status-indicator" id="panelStatusDot"></span>
+          </div>
+          <h3 id="panelName">User Name</h3>
+          <p id="panelUsername" class="user-handle">@username</p>
+          <p id="panelEmail" class="panel-email"><i class="fa-solid fa-envelope"></i> user@example.com</p>
+          
+          <div class="panel-bio-box">
+            <span class="bio-label">About</span>
+            <p id="panelBio" class="bio-text">No bio provided.</p>
+          </div>
+        </div>
+
+        <!-- Shared Media Tab -->
+        <div class="panel-section">
+          <h5><i class="fa-regular fa-image"></i> Shared Media</h5>
+          <div class="shared-media-grid" id="sharedMediaGrid">
+            <p class="empty-media">No media shared yet</p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="panel-section">
+          <button class="btn btn-danger btn-full" id="deleteConversationBtn">
+            <i class="fa-solid fa-trash"></i> Delete Conversation
+          </button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- NEW CHAT / USER SEARCH MODAL -->
+  <div class="modal-backdrop hidden" id="newChatModal">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>New Conversation</h3>
+        <button class="icon-btn" id="closeNewChatModalBtn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="modalUserSearch" placeholder="Search by name or @username...">
+        </div>
+        <div class="modal-users-list" id="modalUsersList">
+          <div class="loading-spinner-container">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MESSAGE MODAL -->
+  <div class="modal-backdrop hidden" id="editMessageModal">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>Edit Message</h3>
+        <button class="icon-btn" id="closeEditMessageModalBtn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editMessageId">
+        <textarea id="editMessageInput" rows="3" class="modal-textarea"></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+          <button class="btn btn-primary" id="saveEditBtn">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current User Data context for Socket & Script -->
+  <script>
+    window.CURRENT_USER = {
+      _id: "<%= currentUser._id %>",
+      name: "<%= currentUser.name %>",
+      username: "<%= currentUser.username %>",
+      email: "<%= currentUser.email %>",
+      profilePicture: "<%= currentUser.profilePicture %>"
+    };
+  </script>
+
+  <!-- Socket.IO Client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

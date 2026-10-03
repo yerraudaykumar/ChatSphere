@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Settings - ChatSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="settings-body">
+
+  <div class="settings-container glass-panel">
+    
+    <div class="settings-header">
+      <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Chat</a>
+      <h2>Application Settings</h2>
+      <p>Configure preferences and notifications</p>
+    </div>
+
+    <div class="settings-section">
+      <h3>Appearance</h3>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Dark Theme</h4>
+          <p>Switch between dark and light appearance modes</p>
+        </div>
+        <div class="toggle-switch">
+          <input type="checkbox" id="themeSwitch" checked>
+          <label for="themeSwitch" class="switch-slider"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Notifications</h3>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Sound Notifications</h4>
+          <p>Play audio chime when a new message arrives</p>
+        </div>
+        <div class="toggle-switch">
+          <input type="checkbox" id="soundSwitch" checked>
+          <label for="soundSwitch" class="switch-slider"></label>
+        </div>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Desktop Toast Alerts</h4>
+          <p>Display floating toast notifications for incoming messages</p>
+        </div>
+        <div class="toggle-switch">
+          <input type="checkbox" id="toastSwitch" checked>
+          <label for="toastSwitch" class="switch-slider"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Account Actions</h3>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h4>Log Out of ChatSphere</h4>
+          <p>End active session on this browser</p>
+        </div>
+        <button id="settingsLogoutBtn" class="btn btn-danger">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings - ChatSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="settings-body">
+
+  <div class="settings-container glass-panel">
+    
+    <div class="settings-header">
+      <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Chat</a>
+      <h2>User Profile Settings</h2>
+      <p>Manage your ChatSphere account profile and security settings</p>
+    </div>
+
+    <div id="alertBox" class="alert-box danger-alert hidden"></div>
+
+    <form id="profileForm" class="settings-form" enctype="multipart/form-data">
+      
+      <!-- Avatar Section -->
+      <div class="avatar-upload-container">
+        <div class="avatar-preview">
+          <img id="avatarPreview" src="<%= currentUser.profilePicture %>" alt="Profile Picture" onerror="this.src='/images/default-avatar.svg'">
+          <label for="profilePicture" class="avatar-upload-btn">
+            <i class="fa-solid fa-camera"></i>
+          </label>
+        </div>
+        <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="hidden">
+        <span class="avatar-hint">Click camera icon to change profile photo</span>
+      </div>
+
+      <!-- General Info -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input type="text" id="name" name="name" value="<%= currentUser.name %>" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-at input-icon"></i>
+            <input type="text" id="username" value="<%= currentUser.username %>" disabled title="Username cannot be changed">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input type="email" id="email" value="<%= currentUser.email %>" disabled title="Email cannot be changed">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bio">About / Bio</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-pen-nib input-icon"></i>
+          <textarea id="bio" name="bio" rows="2" placeholder="Tell something about yourself..."><%= currentUser.bio %></textarea>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <h3>Security / Change Password</h3>
+      
+      <div class="form-group">
+        <label for="currentPassword">Current Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter current password">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-key input-icon"></i>
+          <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password (min 6 chars)">
+        </div>
+      </div>
+
+      <button type="submit" id="saveProfileBtn" class="btn btn-primary btn-full">
+        <span class="btn-text">Save Changes</span>
+        <i class="fa-solid fa-check btn-icon"></i>
+      </button>
+
+    </form>
+  </div>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>

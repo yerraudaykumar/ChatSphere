@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - ChatSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-body">
+
+  <div class="auth-container">
+    <div class="auth-card glass-panel">
+      
+      <div class="auth-header">
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <span class="logo-text">ChatSphere</span>
+        </div>
+        <h2>Create an Account</h2>
+        <p>Join ChatSphere for instant real-time conversations</p>
+      </div>
+
+      <div id="alertBox" class="alert-box danger-alert hidden"></div>
+
+      <form id="registerForm" class="auth-form" enctype="multipart/form-data">
+        <div class="avatar-upload-container">
+          <div class="avatar-preview">
+            <img id="avatarPreview" src="/images/default-avatar.svg" alt="Avatar Preview">
+            <label for="profilePicture" class="avatar-upload-btn">
+              <i class="fa-solid fa-camera"></i>
+            </label>
+          </div>
+          <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="hidden">
+          <span class="avatar-hint">Upload Profile Photo (Optional)</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-id-card input-icon"></i>
+              <input type="text" id="name" name="name" placeholder="John Doe" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-at input-icon"></i>
+              <input type="text" id="username" name="username" placeholder="johndoe" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="password" name="password" placeholder="Min 6 characters" required autocomplete="new-password">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-check-double input-icon"></i>
+              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat password" required autocomplete="new-password">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-full">
+          <span class="btn-text">Create Account</span>
+          <i class="fa-solid fa-user-plus btn-icon"></i>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Already have an account? <a href="/login" class="auth-link">Sign In</a></p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>
